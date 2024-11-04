@@ -4,8 +4,12 @@
 #include <studio.h>
 
 mymemory_t* mymemory_init(size_t size){
+    if(size > 1024){
+        return NULL;
+    }
+
     mymemory_t *memory;
-    unsigned char memory_pool= [size*size];
+    unsigned char memory_pool[1024];
 
     memory.pool= memory_pool;
     memory.total_size= size;
@@ -15,43 +19,27 @@ mymemory_t* mymemory_init(size_t size){
 }
 
 void* mymemory_alloc(mymemory_t *memory, size_t size){ //first fit
-    if(!memory || size <= 0){
+    if(!memory || size <= 0 || size > memory->total_size){
         return NULL;
     }
+
     allocation_t *current= memory->head;
     allocation_t *prev= NULL;
     size_t count = 0;
 
-    while(current){
-        size_t gap = (size_t)((char*)current->start - (char*)memory->pool - count);
-        if (gap >= size) {
+    while(current) {
+        size_t disp= (char*)current->start - ((char*)memory->memory_pool + count)
+        if(disp >= size){
             break;
         }
-        count = (size_t)((char*)current->start - (char*)memory->pool) + current->size;
-        previous = current;
-        current = current->next;
+        count= (char*)current->start + current->size - (char*)memory_pool;
+        prev= current;
+        current= current->next;
     }
-
-    if (memory->total_size - count < size) {
-        return NULL;
-    }
-
-    // Aloca o bloco e cria uma nova entrada na lista de alocações
-    allocation_t *new_allocation = (allocation_t*)(memory->pool + count);
-    new_allocation->start = (void*)(memory->pool + count);
-    new_allocation->size = size;
-    new_allocation->next = current;
-
-    if (previous) {
-        previous->next = new_allocation;
-    } else {
-        memory->head = new_allocation;
-    }
-
-    return new_allocation->start;
-
+    
 
 }
+
 void mymemory_free(mymemory_t *memory, void *ptr){
 
 }
