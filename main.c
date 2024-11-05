@@ -22,7 +22,7 @@ int main()
     sprintf(str, "ola mundo");
 
     // libera o pool de memoria
-    mymemory_release(memory);
+    mymemory_cleanup(memory);
 
     return 0;
 }
