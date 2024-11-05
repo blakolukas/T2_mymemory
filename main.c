@@ -9,15 +9,16 @@ int main()
 
     //int v[32];
     // int *v = alloc(sizeof(int)*32);
-    int *v = mymemory_alloc(memory, 100);
-    for (int i = 0; i < 32; i++)
+    int *v = mymemory_alloc(memory, sizeof(int)*32);
+    for (int i = 0; i < 32; i++){
         v[i] = i+1;
+    }
 
 
     int *v2 = mymemory_alloc(memory, sizeof(int)*16);
 
     // free(v);
-  
+    mymemory_free(memory, v);
 
     char *str = mymemory_alloc(memory, sizeof(char)*16);
     sprintf(str, "ola mundo");

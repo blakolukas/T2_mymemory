@@ -35,24 +35,26 @@ void* mymemory_alloc(mymemory_t *memory, size_t size){ //first fit
 
     allocation_t *current= memory->head; // atual
     printf("current: %p\n", current);
-    allocation_t *prev= NULL; // anterior
+    allocation_t *prev = NULL;
     size_t offset = 0; // onde esta o final do bloco
-    size_t esp= 0;
+
 
     while(current) {
         printf("dentro\n");
-        // espaço entre o inicio e o fim (memory_pool aponta para o primeiro elemento de pool)
-        // compara o final do ultimo bloco colocado com o proximo
-        esp= (char*)current->start - ((char*)memory->pool + offset);
+         // espaço livre entre blocos
+        size_t esp= (char*)current->start - ((char*)memory->pool + offset);
+
         if(esp >= size){
             break; // pq já tem espaço suficiente
         }
 
         // atualiza o tamanho do deslocamento em relaçao ao ultimo bloco colocado
         offset= (char*)current->start + current->size - (char*)memory->pool;
-        prev= current; // atualiza anterior
+
+        prev = current;
         //printf("prev: %p\n", prev);
         current= current->start + current->size; // passa para o proximo
+
         //printf("current em %p\n", current);
     }
 
@@ -67,10 +69,15 @@ void* mymemory_alloc(mymemory_t *memory, size_t size){ //first fit
     new_alloc->start = (memory->pool + offset);
     printf("\nstart em: %p\n\n", new_alloc->start);
     new_alloc->size = size;
-    new_alloc->next = new_alloc->start + size;
+    new_alloc->next = NULL;
     printf("\nnext em: %p\n\n", new_alloc->next);
 
-    memory->head = new_alloc->next;
+    if (prev) {
+        prev->next = new_alloc;
+    } else {
+        memory->head = new_alloc;
+    }
+
 
     printf("alloc em %p\n\n", new_alloc);
 
