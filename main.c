@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "mymemory.h"
 
 int main()
@@ -8,7 +9,7 @@ int main()
 
     //int v[32];
     // int *v = alloc(sizeof(int)*32);
-    int *v = mymemory_alloc(memory, sizeof(int)*32);
+    int *v = mymemory_alloc(memory, 100);
     for (int i = 0; i < 32; i++)
         v[i] = i+1;
 
@@ -16,13 +17,15 @@ int main()
     int *v2 = mymemory_alloc(memory, sizeof(int)*16);
 
     // free(v);
-    mymemory_free(memory, v);
+  
 
     char *str = mymemory_alloc(memory, sizeof(char)*16);
     sprintf(str, "ola mundo");
 
     // libera o pool de memoria
     mymemory_cleanup(memory);
+
+    free(memory);
 
     return 0;
 }
