@@ -63,7 +63,7 @@ void *mymemory_alloc(mymemory_t *memory, size_t size) {
     printf("alloc em %p\n\n", new_alloc->start);
     return new_alloc->start;
 }
-
+//libera alocacao do ptr
 void mymemory_free(mymemory_t *memory, void *ptr) {
     allocation_t *current = memory->head;
     allocation_t *prev = NULL;
@@ -81,7 +81,7 @@ void mymemory_free(mymemory_t *memory, void *ptr) {
         current = current->next;
     }
 }
-
+//como se fosse um print
 void mymemory_display(mymemory_t *memory) {
     allocation_t *current = memory->head;
     if (!current) {
@@ -95,7 +95,7 @@ void mymemory_display(mymemory_t *memory) {
         current = current->next;
     }
 }
-
+//estatisticas 3 blocos inicio meio fim 
 void mymemory_stats(mymemory_t *memory) {
     int total_aloc = 0;
     size_t memoria_alocada = 0;
